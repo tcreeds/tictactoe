@@ -8,27 +8,39 @@ var state = GameState.PREGAME;
 var cells = [];
 var gameDiv;
 
-window.onload = function(){
-    gameDiv = document.getElementById("gameContainer");
+window.onresize = resize;
+
+$(document).ready(function(){
+    gameDiv = $("#gameContainer");
     for (var i = 0; i < 9; i++)
     {
-        var inner = document.createElement("div");
-        inner.addEventListener("touchstart", onCellClick);
-        inner.addEventListener("mousedown", onCellClick);
+        var inner = $("<div></div>");
+        inner.on("touchstart", onCellClick);
+        inner.on("mousedown", onCellClick);
         cells.push(inner);
         
-        var div = document.createElement("div");
-        div.className = "outer";
-        div.appendChild(inner);
-        div.setAttribute("index", i);
-        gameDiv.appendChild(div);
+        var div = $("<div></div>");
+        div.addClass("outer");
+        div.append(inner);
+        div.attr("index", i);
+        gameDiv.append(div);
     }
+    resize();
     reset();
     state = GameState.ONE;
+});
+
+function resize()
+{
+    gameDiv.height(gameDiv.width());
+    $.each(gameDiv.children(), function(i, obj){
+        var cell = $(obj);
+        cell.height(cell.width());
+    });
 }
 
 function onCellClick(e){
-    console.log("down");
+    e.preventDefault();
     var i = this.getAttribute("index");
     var clicked = this.getAttribute("team");
     if (!clicked)
@@ -59,13 +71,13 @@ function reset()
 {
     for (var i = 0; i < cells.length; i++)
     {
-        cells[i].className = "";
-        cells[i].removeAttribute("team");
-        cells[i].style.backgroundColor = "";
+        cells[i].removeClass();
+        cells[i].attr("team", "");
+        cells[i].css("background-color", "");
     }
-    gameDiv.className = "";
+    gameDiv.removeClass("raised");
     setTimeout(function(){
-        gameDiv.className = "raised";
+        gameDiv.addClass("raised");
     }, 1000);
 }
 
@@ -80,7 +92,7 @@ function checkGameCompletion()
     {
         var complete = true;
         for (var i = 0; i < cells.length; i++)
-            if (!cells[i].getAttribute("team"))
+            if (!cells[i].attr("team"))
                 complete = false;
         if (complete)
             gameOver();
@@ -91,11 +103,11 @@ function checkCells(cell1, cell2, cell3)
 {
     if (cell1 < 0 || cell2 < 0 || cell3 < 0 || cell1 > cells.length || cell2 > cells.length || cell3 > cells.length)
         console.log("out of bounds");
-    var team = cells[cell1].getAttribute("team");
-    if (team && cells[cell2].getAttribute("team") == team && cells[cell3].getAttribute("team") == team)
+    var team = cells[cell1].attr("team");
+    if (team && cells[cell2].attr("team") == team && cells[cell3].attr("team") == team)
     {
         for (var i = 0; i < 3; i++)
-            cells[arguments[i]].className = cells[arguments[i]].className + " victory";
+            cells[arguments[i]].addClass("victory");
         return true;
     };
     return false;

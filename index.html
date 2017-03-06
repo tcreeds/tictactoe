@@ -5,11 +5,15 @@
     <title>Tic Tac Toe</title>
     <meta charset=utf-8>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script
+  src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+  integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
+  crossorigin="anonymous"></script>
     <script src="tictac.js"></script>
     <style>
         #gameContainer{
             width: 360px;
-            height: 360px;
+            max-width: 95vw;
             position: relative;
             margin: 20px auto;
             transform: none;
@@ -38,8 +42,7 @@
             position: relative;
             float: left;
             box-sizing: border-box;
-            width: 120px;
-            height: 120px;
+            width: 33%;
         }
         .outer > div{
             position: absolute;
@@ -64,7 +67,7 @@
                 transform: scale(1);
             }
             15%{
-                transform: scale(1.5) rotate(0);
+                transform: scale(1.5) rotate(0deg);
             }
             100%{
                 transform: scale(1) rotate(360deg);
